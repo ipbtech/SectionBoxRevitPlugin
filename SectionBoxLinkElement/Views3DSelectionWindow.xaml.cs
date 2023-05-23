@@ -57,7 +57,17 @@ namespace SectionBoxLinkElement
             string viewName = string.Empty;
             if (checkCreate3DView == true)
             {
-                //Создание дефолтного 3D вида и получение его имени во viewName
+                viewName = $"SectionBoxView.Id{CodeGenerator.Get()}";
+                ViewFamilyType viewType3D = new FilteredElementCollector(doc).OfClass(typeof(ViewFamilyType)).Cast<ViewFamilyType>().
+                    Where(v => v.ViewFamily == ViewFamily.ThreeDimensional).FirstOrDefault();
+
+                using (Transaction trans = new Transaction(doc, "Create 3DView"))
+                {
+                    trans.Start();
+                    View3D viewCreate = View3D.CreateIsometric(doc, viewType3D.Id);
+                    viewCreate.Name = viewName;
+                    trans.Commit();
+                }
             }
             else
             {
@@ -82,6 +92,13 @@ namespace SectionBoxLinkElement
             #endregion
             // Присвоение SectionBox к View3D
             // Открытие вида View3D
+        }
+        public static class CodeGenerator
+        {
+            public static int Get()
+            {
+                return new Random().Next(1000, 9999);
+            }
         }
     }
 }
