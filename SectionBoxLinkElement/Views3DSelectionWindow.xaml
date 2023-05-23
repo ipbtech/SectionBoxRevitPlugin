@@ -1,0 +1,41 @@
+﻿<Window x:Class="SectionBoxLinkElement.Views3DSelectionWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SectionBoxLinkElement"
+             mc:Ignorable="d" 
+             Height="121" Width="300" 
+             WindowStartupLocation="CenterScreen"
+             Title="Рамка выбора по элементу связи" ResizeMode="NoResize" SizeToContent="Height">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Margin="5,0,0,0" VerticalAlignment="Center" 
+            Text="Выбрать существующий 3D вид:" FontSize="12" Grid.ColumnSpan="2"/>
+        <ComboBox
+            Grid.Row="1" x:Name="Views3DList" 
+            Margin="5,0,5,0" VerticalAlignment="Center" FontSize="12" Grid.ColumnSpan="2" SelectedIndex="0"/>
+        <TextBlock 
+            Grid.Row="2"
+            Margin="5,0,0,0" VerticalAlignment="Center" 
+            Text="Создать новый 3D вид:" FontSize="12" Grid.ColumnSpan="2"/>
+        <CheckBox
+            Grid.Row="2" x:Name="Create3DView"
+            VerticalAlignment="Center" 
+            IsChecked="False" Margin="0,0,5,0"
+            Checked="Create3DView_checked" Unchecked="Create3DView_unchecked" Grid.Column="1" HorizontalAlignment="Right"/>
+        <Button
+            Grid.Row="3" x:Name="StartButton"
+            Content="Запуск" VerticalContentAlignment="Center" 
+            HorizontalAlignment="Center" VerticalAlignment="Center" 
+            Width="70" Height="20" Click="StartButton_Click"/>
+    </Grid>
+</Window>
+
