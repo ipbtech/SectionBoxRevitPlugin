@@ -2,6 +2,7 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using System.Collections.Generic;
 
 namespace SectionBoxLinkElement
 {
@@ -22,7 +23,7 @@ namespace SectionBoxLinkElement
 
                 if (pickRefs.Count != 0)
                 {
-                    Views3DSelectionWindow window = new Views3DSelectionWindow(doc);
+                    Views3DSelectionWindow window = new Views3DSelectionWindow(doc, uidoc, pickRefs);
                     try
                     {
                         System.Windows.Window wndRevit = WindowHandle.GettingRevitWindow(commandData);
