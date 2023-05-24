@@ -1,19 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SectionBoxLinkElement
 {
@@ -53,51 +40,70 @@ namespace SectionBoxLinkElement
         }
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            #region Получение 3D вида для SectionBox
-            string viewName = string.Empty;
-            if (checkCreate3DView == true)
+            string view3DName = SomeMethods.GetView3DName(doc, checkCreate3DView, Views3DList.SelectedItem.ToString());
+            try
             {
-                viewName = $"SectionBoxView.Id{CodeGenerator.Get()}";
-                ViewFamilyType viewType3D = new FilteredElementCollector(doc).OfClass(typeof(ViewFamilyType)).Cast<ViewFamilyType>().
-                    Where(v => v.ViewFamily == ViewFamily.ThreeDimensional).FirstOrDefault();
+                View3D boundBoxView = SomeMethods.GetView3D(doc, view3DName);
+                #region Получение BoundingBox по выбранным элементам, установка Max и Min
 
-                using (Transaction trans = new Transaction(doc, "Create 3DView"))
-                {
-                    trans.Start();
-                    View3D viewCreate = View3D.CreateIsometric(doc, viewType3D.Id);
-                    viewCreate.Name = viewName;
-                    trans.Commit();
-                }
+
+
+                #endregion
+                // Присвоение SectionBox к View3D
+                // Открытие вида View3D
             }
-            else
+            catch (NullReferenceException)
             {
-                viewName = Views3DList.SelectedItem.ToString();
-                if (viewName == "Текущий активный 3D вид")
-                {
-                    if (doc.ActiveView.GetType() == typeof(View3D))
-                    {
-                        viewName = doc.ActiveView.Name;
-                    }
-                    else
-                    {
-                        MsgShow.Info(TaskDialogIcon.TaskDialogIconError, "Ошибка", "Текущий активный вид не является 3D видом",
-                            "Выберите существующий 3D вид или создайте новый", "");
-                    }
-                }
+                MsgShow.Info(TaskDialogIcon.TaskDialogIconError, "Ошибка", "Текущий активный вид не является 3D видом",
+                    "Выберите существующий 3D вид или создайте новый", "");
             }
-            #endregion
-            // Получение View3D по его имени
-            #region Получение BoundingBox по выбранным элементам, установка Max и Min
-            // Получение нового BoundingBox на View3D
-            #endregion
-            // Присвоение SectionBox к View3D
-            // Открытие вида View3D
         }
         public static class CodeGenerator
         {
             public static int Get()
             {
                 return new Random().Next(1000, 9999);
+            }
+        }
+        public static class SomeMethods
+        {
+            public static string GetView3DName(Document doc, bool check, string selectedItem)
+            {
+                string viewName = string.Empty;
+                if (check == true)
+                {
+                    viewName = $"SectionBoxView.SpecialId({CodeGenerator.Get()})";
+                    ViewFamilyType viewType3D = new FilteredElementCollector(doc).OfClass(typeof(ViewFamilyType)).Cast<ViewFamilyType>().
+                        Where(v => v.ViewFamily == ViewFamily.ThreeDimensional).FirstOrDefault();
+
+                    using (Transaction trans = new Transaction(doc, "Create 3DView"))
+                    {
+                        trans.Start();
+                        View3D viewCreate = View3D.CreateIsometric(doc, viewType3D.Id);
+                        viewCreate.Name = viewName;
+                        trans.Commit();
+                    }
+                }
+                else
+                {
+                    viewName = selectedItem;
+                    if (viewName == "Текущий активный 3D вид")
+                    {
+                        if (doc.ActiveView.GetType() == typeof(View3D))
+                        {
+                            viewName = doc.ActiveView.Name;
+                        }
+                    }
+                }
+                return viewName;
+            }
+            public static View3D GetView3D(Document doc, string name)
+            {
+                View3D view3D = new FilteredElementCollector(doc).OfClass(typeof(View3D)).Cast<View3D>().
+                        Where(view => view.Name == name).FirstOrDefault();
+                view3D.IsSectionBoxActive = false;
+
+                return view3D;
             }
         }
     }
