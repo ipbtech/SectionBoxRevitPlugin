@@ -12,12 +12,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Media\ipb_logo.ico" />
+    <None Remove="Media\logo_sectionbox.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autodesk.Revit.SDK" Version="2020.2.1.2001" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Media\ipb_logo.ico" />
+    <Resource Include="Media\logo_sectionbox.ico" />
   </ItemGroup>
 
 </Project>

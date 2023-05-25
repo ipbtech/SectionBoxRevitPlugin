@@ -7,7 +7,8 @@
              mc:Ignorable="d" 
              Height="121" Width="300" 
              WindowStartupLocation="CenterScreen"
-             Title="Рамка выбора по элементу связи" ResizeMode="NoResize" SizeToContent="Height">
+             Title="Рамка выбора по элементу связи" ResizeMode="NoResize" SizeToContent="Height" 
+             Icon="/SectionBoxLinkElement_ipb;component/Media/ipb_logo.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
